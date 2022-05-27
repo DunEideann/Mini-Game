@@ -1,0 +1,28 @@
+x-service: &service
+  #restart: always
+  environment:
+    - TZ=America/Santiago
+  # env_file:
+  #   - .env
+  logging:
+    driver: json-file
+    options:
+      max-size: "50m"
+      max-file: "5"
+
+version: "3.7"
+
+services:
+  hanged-game:
+    <<: *service
+    container_name: hanged-game
+    build:
+      context: ../hanged_game
+      dockerfile: Dockerfile
+    image: hanged_game
+    volumes:
+      # Don't mount the whole folder, instead pick and choose the
+      # code-containing subfolders (this avoids an issue with
+      # overwritten gems)
+      # TODO find out if there's a better way
+      - ../hanged_game/src:/app/src
